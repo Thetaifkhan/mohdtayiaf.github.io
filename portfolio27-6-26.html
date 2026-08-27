@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohd Tayiaf — Senior Boomi Developer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],serif:['Playfair Display','serif']}}}}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#fafafa;color:#1c1917;overflow-x:hidden}
+#kinetic-grid-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.section-content{position:relative;z-index:10}
+.glass-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 3px rgba(0,0,0,0.04),0 8px 32px rgba(0,0,0,0.04);transition:all 0.5s cubic-bezier(0.16,1,0.3,1)}
+.glass-card:hover{background:rgba(255,255,255,0.9);border-color:rgba(245,158,11,0.25);transform:translateY(-4px);box-shadow:0 4px 6px rgba(0,0,0,0.02),0 20px 60px rgba(245,158,11,0.08)}
+.glow-line{height:1px;background:linear-gradient(90deg,transparent,rgba(180,83,9,0.2),transparent)}
+.stat-card{background:linear-gradient(135deg,rgba(245,158,11,0.06),rgba(245,158,11,0.02));border:1px solid rgba(245,158,11,0.12)}
+.tech-badge{background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.08);font-size:0.68rem;padding:3px 10px;border-radius:999px;color:#57534e;transition:all 0.3s}
+.tech-badge:hover{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);color:#92400e}
+.status-active{background:rgba(22,163,74,0.08);color:#16a34a;border:1px solid rgba(22,163,74,0.2)}
+.status-completed{background:rgba(37,99,235,0.08);color:#2563eb;border:1px solid rgba(37,99,235,0.2)}
+.status-migration{background:rgba(147,51,234,0.08);color:#9333ea;border:1px solid rgba(147,51,234,0.2)}
+.status-reusable{background:rgba(245,158,11,0.08);color:#d97706;border:1px solid rgba(245,158,11,0.2)}
+.achievement-item{position:relative;padding-left:1.25rem}
+.achievement-item::before{content:'';position:absolute;left:0;top:0.55rem;width:5px;height:5px;background:#f59e0b;border-radius:50%;box-shadow:0 0 6px rgba(245,158,11,0.4)}
+.flow-step{background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.06);padding:10px 14px;border-radius:10px}
+.flow-arrow{color:rgba(180,83,9,0.5);font-size:1.1rem}
+.project-detail-section{max-height:0;overflow:hidden;transition:max-height 0.6s cubic-bezier(0.16,1,0.3,1),opacity 0.4s;opacity:0}
+.project-detail-section.open{max-height:3000px;opacity:1}
+.expand-btn{transition:all 0.3s;cursor:pointer}
+.expand-btn:hover{color:#d97706}
+.expand-btn .arrow-icon{transition:transform 0.4s cubic-bezier(0.16,1,0.3,1)}
+.expand-btn.active .arrow-icon{transform:rotate(180deg)}
+.company-header{position:relative;overflow:hidden}
+.company-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f59e0b,transparent)}
+.nav-link{position:relative;color:#78716c;transition:color 0.3s}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:#f59e0b;transition:width 0.3s}
+.nav-link:hover{color:#1c1917}
+.nav-link:hover::after{width:100%}
+.metric-bar{height:4px;background:rgba(0,0,0,0.04);border-radius:999px;overflow:hidden}
+.metric-bar-fill{height:100%;border-radius:999px;width:0;background:linear-gradient(90deg,#f59e0b,#fbbf24);transition:width 1.5s cubic-bezier(0.16,1,0.3,1)}
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.hero-text-gradient{background:linear-gradient(135deg,#1c1917 0%,#78350f 50%,#b45309 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.filter-btn{padding:7px 18px;border-radius:999px;font-size:0.78rem;font-weight:500;border:1px solid rgba(0,0,0,0.08);background:transparent;color:#78716c;cursor:pointer;transition:all 0.3s}
+.filter-btn:hover{border-color:rgba(245,158,11,0.3);color:#1c1917}
+.filter-btn.active{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:#92400e}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#fafafa}
+::-webkit-scrollbar-thumb{background:#d6d3d1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#a8a29e}
+@keyframes pulse-glow{0%,100%{box-shadow:0 1px 3px rgba(0,0,0,0.04),0 8px 32px rgba(0,0,0,0.04)}50%{box-shadow:0 1px 3px rgba(0,0,0,0.04),0 8px 32px rgba(245,158,11,0.12)}}
+.pulse-glow{animation:pulse-glow 3s ease-in-out infinite}
+.light-section{background:#fafafa}
+.mid-section{background:#f5f5f4}
+.skill-card{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.05);border-radius:1rem;padding:1.5rem;transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
+.skill-card:hover{background:rgba(255,255,255,0.95);border-color:rgba(245,158,11,0.2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(245,158,11,0.06)}
+.cred-card{background:linear-gradient(135deg,rgba(255,255,255,0.8),rgba(255,255,255,0.5));border:1px solid rgba(0,0,0,0.06);border-radius:1rem;padding:1.25rem 1.5rem;transition:all 0.4s;position:relative;overflow:hidden}
+.cred-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,#f59e0b,#d97706);border-radius:0 2px 2px 0}
+.cred-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+.step-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:600;color:rgba(245,158,11,0.12);line-height:1}
+.open-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);color:#16a34a;font-size:0.72rem;font-weight:600}
+
+/* ============ PREMIUM MOTION LAYER ============ */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#d97706,#f59e0b,#fbbf24);z-index:60;box-shadow:0 0 8px rgba(245,158,11,0.5);transform-origin:left}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:70;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
+.cursor-dot{width:6px;height:6px;background:#d97706}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(217,119,6,0.4);transition:width 0.25s,height 0.25s,border-color 0.25s,background 0.25s}
+.cursor-ring.cursor-hover{width:64px;height:64px;background:rgba(245,158,11,0.06);border-color:rgba(217,119,6,0.6)}
+body.has-fine-pointer{cursor:none}
+body.has-fine-pointer a,body.has-fine-pointer button{cursor:none}
+@media (hover:none),(pointer:coarse){.cursor-dot,.cursor-ring{display:none!important}body.has-fine-pointer{cursor:auto}}
+
+.magnetic-btn{position:relative;display:inline-flex;will-change:transform}
+.tilt-card{will-change:transform;transform-style:preserve-3d}
+.tilt-card .tilt-shine{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(245,158,11,0.10),transparent 45%);opacity:0;transition:opacity 0.4s;pointer-events:none}
+.tilt-card:hover .tilt-shine{opacity:1}
+
+.marquee-track{display:flex;width:max-content;animation:marquee 32s linear infinite}
+.marquee-wrap:hover .marquee-track{animation-play-state:paused}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{display:flex;align-items:center;gap:.6rem;padding:0 2.5rem;white-space:nowrap;color:#a8a29e;font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
+.marquee-item .dot{width:4px;height:4px;border-radius:50%;background:#f59e0b}
+
+.split-char{display:inline-block;will-change:transform,opacity}
+.kicker-line{position:relative;display:inline-block}
+.kicker-line::after{content:'';position:absolute;left:0;bottom:-8px;height:1px;width:0;background:linear-gradient(90deg,#d97706,transparent);transition:width 1s cubic-bezier(0.16,1,0.3,1)}
+.kicker-line.line-drawn::after{width:100%}
+
+.nav-link.nav-active{color:#1c1917}
+.nav-link.nav-active::after{width:100%}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  .cursor-dot,.cursor-ring,#scroll-progress{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50" style="background:rgba(250,250,250,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.04)">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center"><span class="text-white font-bold text-sm">MT</span></div>
+      <span class="font-semibold text-sm tracking-wide text-stone-800 hidden sm:block">MOHD TAYIAF</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#about" class="nav-link text-sm font-medium">About</a>
+      <a href="#skills" class="nav-link text-sm font-medium">Skills</a>
+      <a href="#process" class="nav-link text-sm font-medium">Process</a>
+      <a href="#tcs" class="nav-link text-sm font-medium">Projects</a>
+      <a href="#credentials" class="nav-link text-sm font-medium">Credentials</a>
+      <a href="https://www.linkedin.com/in/mohd-tayiaf-95aa171aa/" target="_blank" rel="noopener" class="nav-link text-sm font-medium flex items-center gap-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+    <button id="mobile-menu-btn" class="md:hidden text-stone-400 hover:text-stone-800 transition-colors"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-3" style="background:rgba(250,250,250,0.95)">
+    <a href="#about" class="nav-link text-sm font-medium py-2">About</a>
+    <a href="#skills" class="nav-link text-sm font-medium py-2">Skills</a>
+    <a href="#process" class="nav-link text-sm font-medium py-2">Process</a>
+    <a href="#tcs" class="nav-link text-sm font-medium py-2">Projects</a>
+    <a href="#credentials" class="nav-link text-sm font-medium py-2">Credentials</a>
+    <a href="https://www.linkedin.com/in/mohd-tayiaf-95aa171aa/" target="_blank" rel="noopener" class="nav-link text-sm font-medium py-2 flex items-center gap-1.5">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+</nav>
+
+<div class="section-content">
+
+<!-- ==================== HERO / ABOUT ==================== -->
+<section id="about" class="relative overflow-hidden min-h-screen flex items-center justify-center px-6 pt-20 pb-16">
+  <canvas id="kinetic-grid-canvas"></canvas>
+  <div class="relative z-10 max-w-4xl mx-auto text-center">
+    <div class="fade-in">
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <span class="open-badge"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Open to opportunities</span>
+        <span class="text-stone-300 text-xs">📍 Prayagraj, India</span>
+      </div>
+      <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl font-400 tracking-tight leading-[1.05] mb-5">
+        <span class="hero-text-gradient">Mohd Tayiaf</span>
+      </h1>
+      <p class="text-amber-800/70 text-sm md:text-base font-medium tracking-wide mb-3">Senior Boomi Developer & Integration Designer</p>
+      <p class="text-stone-400 text-sm md:text-base font-light leading-relaxed max-w-2xl mx-auto mb-8 italic">
+        "Designing & building the wiring between enterprise systems"
+      </p>
+      <p class="text-stone-500 text-sm font-light leading-relaxed max-w-3xl mx-auto mb-4">
+        4+ years designing, developing, and running Dell Boomi integrations across Workday, Salesforce, SAP, Azure, and a dozen other systems that need to talk to each other reliably.
+      </p>
+      <p class="text-stone-400 text-sm font-light leading-relaxed max-w-3xl mx-auto mb-10">
+        Currently embedded in a shared DevOps integration team at TCS, supporting SHV Energy. I own the full integration lifecycle — turning a solution architect's ISA into an Integration Design Specification, then building, testing, and supporting it in production.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#tcs" class="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20">Explore Projects</a>
+        <a href="https://www.linkedin.com/in/mohd-tayiaf-95aa171aa/" target="_blank" rel="noopener" class="px-8 py-4 border border-stone-200 hover:border-amber-400 text-stone-700 font-medium text-sm rounded-full transition-all duration-300 hover:bg-amber-50 flex items-center gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Connect on LinkedIn
+        </a>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 fade-in" style="transition-delay:0.2s">
+      <div class="stat-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-semibold text-amber-700" data-count="12">0</div><div class="text-[10px] text-stone-400 mt-1 font-medium uppercase tracking-wider">Total Projects</div></div>
+      <div class="stat-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-semibold text-amber-700" data-count="50" data-suffix="+">0</div><div class="text-[10px] text-stone-400 mt-1 font-medium uppercase tracking-wider">Systems Connected</div></div>
+      <div class="stat-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-semibold text-amber-700" data-count="99.8" data-suffix="%" data-decimal="1">0</div><div class="text-[10px] text-stone-400 mt-1 font-medium uppercase tracking-wider">Success Rate</div></div>
+      <div class="stat-card rounded-2xl p-5 text-center"><div class="text-2xl md:text-3xl font-semibold text-amber-700" data-count="6">0</div><div class="text-[10px] text-stone-400 mt-1 font-medium uppercase tracking-wider">Certifications</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MARQUEE TICKER ==================== -->
+<div class="marquee-wrap py-5 border-y border-stone-200/60" style="background:rgba(255,255,255,0.5)">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="dot"></span>Dell Boomi</div>
+    <div class="marquee-item"><span class="dot"></span>Workday</div>
+    <div class="marquee-item"><span class="dot"></span>Salesforce</div>
+    <div class="marquee-item"><span class="dot"></span>SAP S/4HANA</div>
+    <div class="marquee-item"><span class="dot"></span>Azure</div>
+    <div class="marquee-item"><span class="dot"></span>OAuth 2.0</div>
+    <div class="marquee-item"><span class="dot"></span>Kafka</div>
+    <div class="marquee-item"><span class="dot"></span>ServiceNow</div>
+    <div class="marquee-item"><span class="dot"></span>Dell Boomi</div>
+    <div class="marquee-item"><span class="dot"></span>Workday</div>
+    <div class="marquee-item"><span class="dot"></span>Salesforce</div>
+    <div class="marquee-item"><span class="dot"></span>SAP S/4HANA</div>
+    <div class="marquee-item"><span class="dot"></span>Azure</div>
+    <div class="marquee-item"><span class="dot"></span>OAuth 2.0</div>
+    <div class="marquee-item"><span class="dot"></span>Kafka</div>
+    <div class="marquee-item"><span class="dot"></span>ServiceNow</div>
+  </div>
+</div>
+
+<!-- ==================== SKILLS GRID ==================== -->
+<section id="skills" class="py-28 px-6 mid-section">
+  <div class="max-w-7xl mx-auto">
+    <div class="fade-in mb-4 text-center">
+      <p class="text-amber-700/60 text-xs font-semibold tracking-[0.3em] uppercase mb-4">Built for the parts of the system nobody sees</p>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-stone-900 mb-3">What's actually running under the hood</h2>
+      <p class="text-stone-400 text-sm font-light max-w-xl mx-auto">Hover a card — everything here gets used in production, not just listed.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12 fade-in" style="transition-delay:0.1s">
+      <div class="skill-card">
+        <div class="text-2xl mb-3">⚡</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Integration Platform</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">Dell Boomi</span><span class="tech-badge">HTTP</span><span class="tech-badge">SOAP</span><span class="tech-badge">Database V2</span><span class="tech-badge">SFTP / FTP</span><span class="tech-badge">EDI X12</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="text-2xl mb-3">📐</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Design & Architecture</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">ISA → IDS</span><span class="tech-badge">APIM Design Sheets</span><span class="tech-badge">Process Orchestration</span><span class="tech-badge">Atom / Molecule Mgmt</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="text-2xl mb-3">☁️</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Cloud & Infrastructure</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">Azure APIM</span><span class="tech-badge">App Service</span><span class="tech-badge">App Gateway</span><span class="tech-badge">Blob Storage</span><span class="tech-badge">Azure SQL</span><span class="tech-badge">WebJobs</span><span class="tech-badge">Azure AD Auth</span><span class="tech-badge">Kafka</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="text-2xl mb-3">💻</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Scripting & Development</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">JavaScript</span><span class="tech-badge">Groovy</span><span class="tech-badge">Python / Flask</span><span class="tech-badge">Vanilla JS</span><span class="tech-badge">OAuth 2.0</span><span class="tech-badge">JWT</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="text-2xl mb-3">🔗</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Systems Wired</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">Workday</span><span class="tech-badge">Workday Prism</span><span class="tech-badge">Salesforce</span><span class="tech-badge">SF Marketing Cloud</span><span class="tech-badge">SAP S/4HANA</span><span class="tech-badge">JDE</span><span class="tech-badge">Geotab</span><span class="tech-badge">Facebook API</span><span class="tech-badge">Customer Portal</span><span class="tech-badge">IGA</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="text-2xl mb-3">🔧</div>
+        <h3 class="text-sm font-semibold text-stone-800 mb-3 tracking-tight">Ops & Practice</h3>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="tech-badge">ServiceNow</span><span class="tech-badge">CI/CD Design</span><span class="tech-badge">GitHub Copilot</span><span class="tech-badge">Cursor</span><span class="tech-badge">Test Automation</span><span class="tech-badge">Incident Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW I WORK ==================== -->
+<section id="process" class="py-28 px-6 light-section">
+  <div class="max-w-5xl mx-auto">
+    <div class="fade-in mb-4 text-center">
+      <p class="text-amber-700/60 text-xs font-semibold tracking-[0.3em] uppercase mb-4">From designing to production</p>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-stone-900 mb-3">How I work</h2>
+      <p class="text-stone-400 text-sm font-light max-w-xl mx-auto">Every integration follows a repeatable process — no surprises, no black boxes.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-14 fade-in" style="transition-delay:0.1s">
+      <div class="relative">
+        <div class="step-num">01</div>
+        <h3 class="text-sm font-semibold text-stone-800 mt-2 mb-2 tracking-tight">Decompose the ISA</h3>
+        <p class="text-stone-500 text-sm font-light leading-relaxed">Take the Integration Solution Architecture and break it into an actionable IDS with every field, map, and error case documented. Create APIM API design sheets.</p>
+      </div>
+      <div class="relative">
+        <div class="step-num">02</div>
+        <h3 class="text-sm font-semibold text-stone-800 mt-2 mb-2 tracking-tight">Build & Unit Test</h3>
+        <p class="text-stone-500 text-sm font-light leading-relaxed">Develop the Boomi process with shaped data, test each branch and decision shape independently, and document results before moving on.</p>
+      </div>
+      <div class="relative">
+        <div class="step-num">03</div>
+        <h3 class="text-sm font-semibold text-stone-800 mt-2 mb-2 tracking-tight">Integrate & E2E Test</h3>
+        <p class="text-stone-500 text-sm font-light leading-relaxed">Connect to real endpoints, run full end-to-end tests with production-like payloads, validate error handling and retry logic.</p>
+      </div>
+      <div class="relative">
+        <div class="step-num">04</div>
+        <h3 class="text-sm font-semibold text-stone-800 mt-2 mb-2 tracking-tight">Deploy & Support</h3>
+        <p class="text-stone-500 text-sm font-light leading-relaxed">Promote through environments via CI/CD, monitor in production, handle incidents and change requests through ServiceNow with full traceability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TCS / SHV PROJECTS ==================== -->
+<section id="tcs" class="py-28 px-6 mid-section">
+  <div class="max-w-7xl mx-auto">
+    <div class="fade-in mb-14">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-600/20"><span class="text-white font-bold text-lg">T</span></div>
+        <div>
+          <p class="text-[10px] text-amber-700/60 font-semibold tracking-[0.2em] uppercase">Current Role &middot; Oct 2024 — Present</p>
+          <h2 class="font-serif text-3xl md:text-5xl tracking-tight text-stone-900">TCS / SHV Energy</h2>
+        </div>
+      </div>
+      <p class="text-stone-500 font-light leading-relaxed max-w-3xl mt-4">
+        Delivering enterprise-grade integration solutions for SHV Energy's North American propane operations. Focused on compliance, security modernization (OAuth 2.0), and building reusable integration services.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-10 fade-in" style="transition-delay:0.1s">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="integration">Integrations</button>
+      <button class="filter-btn" data-filter="service">Reusable Services</button>
+      <button class="filter-btn" data-filter="security">Security</button>
+      <button class="filter-btn" data-filter="fullstack">Full-Stack</button>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="tcs-projects">
+
+      <!-- Geotab -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="integration">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center"><i data-lucide="truck" class="w-5 h-5 text-emerald-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Production</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Geotab Compliance Reporting</h3>
+          <p class="text-stone-400 text-xs font-medium">Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Retrieves vehicle telemetry from the Geotab API and generates compliance reports for propane-carrying trucks across the United States.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">What It Does</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-stone-600 font-light">Real-time vehicle data — GPS, speed, distance, driver behavior</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Evaluates against US hazmat/propane transportation regulations</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Generates compliant/non-compliant status reports</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Full audit trail for regulatory compliance</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Tech Stack</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Dell Boomi</span><span class="tech-badge">Geotab API</span><span class="tech-badge">HTTP Connector</span><span class="tech-badge">Azure Storage</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Real-time compliance monitoring across entire fleet</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Automated report generation — 80% reduction in manual effort</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Reduced compliance violations through proactive monitoring</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workday IGA -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="integration" style="transition-delay:0.05s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Production</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Access Recertification Denial</h3>
+          <p class="text-stone-400 text-xs font-medium">Workday ↔ IGA &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Automatically syncs worker contract end-dates from Workday to IGA when access recertification is denied, ensuring no workers retain access beyond their employment end date.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">What It Does</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-stone-600 font-light">Monitors Workday for recertification denial events</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Extracts worker contract end-date, syncs to IGA</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Triggers automatic access revocation</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">ServiceNow ticket creation on failure</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Tech Stack</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Dell Boomi</span><span class="tech-badge">Workday Connector</span><span class="tech-badge">REST/HTTP</span><span class="tech-badge">IGA Platform</span><span class="tech-badge">ServiceNow</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Reduced manual offboarding effort by 70%</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Zero instances of improper access retention</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Compliance ready for SOX, SOC2 audits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JWT Service -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="service" style="transition-delay:0.1s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center"><i data-lucide="key-round" class="w-5 h-5 text-amber-600"></i></div>
+            <span class="status-reusable text-[10px] font-semibold px-3 py-1 rounded-full">Active & Reusable</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Common JWT Token Generation</h3>
+          <p class="text-stone-400 text-xs font-medium">Shared Service &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Shared, reusable microservice-like process generating OAuth 2.0 JWT tokens. Single source of truth for secure authentication across enterprise systems.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Capabilities</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-stone-600 font-light">OAuth 2.0 JWT generation with RS256, HS256</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Proper expiration, claims, and refresh workflows</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Centralized RSA key management</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Consumed By (5+ Processes)</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Salesforce API</span><span class="tech-badge">SAP S/4HANA</span><span class="tech-badge">Azure API Mgmt</span><span class="tech-badge">Third-Party SaaS</span><span class="tech-badge">OAuth 2.0</span><span class="tech-badge">JWT</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Eliminated duplicate authentication logic</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Reduced development time for new integrations by 40%</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Single source of truth for JWT handling</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Service -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="service" style="transition-delay:0.15s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center"><i data-lucide="mail" class="w-5 h-5 text-purple-600"></i></div>
+            <span class="status-reusable text-[10px] font-semibold px-3 py-1 rounded-full">Active & Reusable</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Common HTML Email Service</h3>
+          <p class="text-stone-400 text-xs font-medium">Shared Service &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Standardized email notification service sending formatted HTML emails across all integration processes for alerts, notifications, and status updates.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Features</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-stone-600 font-light">HTML emails with branding and dynamic content</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">SMTP connectivity, attachments (CSV, PDF)</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Delivery and failure tracking</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Usage & Tech</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Failure Alerts</span><span class="tech-badge">Completion Notifications</span><span class="tech-badge">Summary Reports</span><span class="tech-badge">SMTP</span><span class="tech-badge">HTML/CSS</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">99.5% email delivery rate</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Eliminated notification lag across all processes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Facebook Leads -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="integration" style="transition-delay:0.2s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center"><i data-lucide="megaphone" class="w-5 h-5 text-indigo-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Production</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Facebook Lead Ads to Azure Blob</h3>
+          <p class="text-stone-400 text-xs font-medium">Marketing Integration &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Captures lead data from Facebook marketing campaigns and delivers it to Azure Blob Storage for downstream marketing analytics and CRM ingestion.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Flow</p>
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="flow-step text-xs text-stone-600">Facebook Ads</div><span class="flow-arrow">→</span>
+              <div class="flow-step text-xs text-stone-600">Boomi</div><span class="flow-arrow">→</span>
+              <div class="flow-step text-xs text-stone-600">Transform</div><span class="flow-arrow">→</span>
+              <div class="flow-step text-xs text-stone-600">Azure Blob</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Tech Stack</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Facebook Marketing API</span><span class="tech-badge">Azure Blob</span><span class="tech-badge">HTTP Connector</span><span class="tech-badge">CSV/JSON</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Automated lead capture — eliminated manual exports</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Foundation for future ML-based lead scoring</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing Cloud -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" data-category="integration" style="transition-delay:0.25s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-pink-50 flex items-center justify-center"><i data-lucide="target" class="w-5 h-5 text-pink-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Production</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Marketing Cloud Opt-In Sync</h3>
+          <p class="text-stone-400 text-xs font-medium">Customer Portal → SFMC &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Automatically marks customers based on promotional opt-in preferences captured through a customer portal booking application, syncing to SFMC in real-time.</p>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">What It Does</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-stone-600 font-light">Monitors portal for opt-in/opt-out changes</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">Real-time sync to Salesforce Marketing Cloud</div>
+              <div class="achievement-item text-sm text-stone-600 font-light">GDPR, CAN-SPAM, SOC2 compliance</div>
+            </div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Tech Stack</p>
+            <div class="flex flex-wrap gap-1.5"><span class="tech-badge">REST API</span><span class="tech-badge">SF Marketing Cloud</span><span class="tech-badge">Customer Portal</span><span class="tech-badge">GDPR</span><span class="tech-badge">CAN-SPAM</span><span class="tech-badge">JavaScript</span><span class="tech-badge">Groovy</span></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">100% compliance with customer preferences</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Reduced unsubscribe complaints by 85%</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">Real-time syncing (&lt; 1 minute latency)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OAuth Migration -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in lg:col-span-2" data-category="security" style="transition-delay:0.3s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center"><i data-lucide="lock" class="w-5 h-5 text-red-600"></i></div>
+            <span class="status-migration text-[10px] font-semibold px-3 py-1 rounded-full">Active Migration</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Basic Auth to OAuth 2.0 Migration</h3>
+          <p class="text-stone-400 text-xs font-medium">SAP S/4HANA Security Upgrade &middot; Oct 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Comprehensive security upgrade migrating all integration authentication from legacy Basic Auth to OAuth 2.0. 25+ integrations, zero downtime.</p>
+              <div class="mb-5">
+                <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Scope</p>
+                <div class="space-y-2">
+                  <div class="achievement-item text-sm text-stone-600 font-light">All Basic Auth integrations identified and registered</div>
+                  <div class="achievement-item text-sm text-stone-600 font-light">Token refresh workflows for long-running processes</div>
+                  <div class="achievement-item text-sm text-stone-600 font-light">Authentication continuity maintained during migration</div>
+                </div>
+              </div>
+              <div>
+                <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Systems</p>
+                <div class="flex flex-wrap gap-1.5"><span class="tech-badge">SAP S/4HANA</span><span class="tech-badge">Workday</span><span class="tech-badge">Salesforce</span><span class="tech-badge">Azure</span><span class="tech-badge">10+ Systems</span><span class="tech-badge">OAuth 2.0</span><span class="tech-badge">JWT</span></div>
+              </div>
+            </div>
+            <div>
+              <div class="grid grid-cols-2 gap-4 mb-5">
+                <div class="p-4 rounded-xl bg-red-50 border border-red-100"><div class="text-2xl font-semibold text-red-600">25+</div><div class="text-[10px] text-stone-500 mt-1">Integrations Migrated</div></div>
+                <div class="p-4 rounded-xl bg-green-50 border border-green-100"><div class="text-2xl font-semibold text-green-600">Zero</div><div class="text-[10px] text-stone-500 mt-1">Downtime</div></div>
+                <div class="p-4 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">C → A+</div><div class="text-[10px] text-stone-500 mt-1">Security Rating</div></div>
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-100"><div class="text-2xl font-semibold text-blue-600">100%</div><div class="text-[10px] text-stone-500 mt-1">Audit Coverage</div></div>
+              </div>
+              <div>
+                <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Key Achievements</p>
+                <div class="space-y-2">
+                  <div class="achievement-item text-sm text-amber-800/80 font-light">Eliminated hardcoded credentials</div>
+                  <div class="achievement-item text-sm text-amber-800/80 font-light">Simplified credential rotation</div>
+                  <div class="achievement-item text-sm text-amber-800/80 font-light">Audit logging for all auth events</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CI/CD Tool -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in lg:col-span-2 pulse-glow" data-category="fullstack" style="transition-delay:0.35s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center"><i data-lucide="rocket" class="w-5 h-5 text-cyan-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Production</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Boomi CI/CD Tool — Custom Built</h3>
+          <p class="text-stone-400 text-xs font-medium">Full-Stack Application &middot; Dec 2024 — Present</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-6">Flask-based Python app with vanilla JS frontend, deployed to Azure as a private-network enterprise-grade application. Handled the entire idea-to-architecture pipeline, including Azure Auth, Application Gateway, Web App configuration, WebJobs, and APIs, using Copilot and Cursor to accelerate development. Reduced deployment time from 45 min to 5 min.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="p-5 rounded-xl bg-cyan-50/50 border border-cyan-100">
+              <div class="flex items-center gap-2 mb-3"><i data-lucide="server" class="w-4 h-4 text-cyan-600"></i><p class="text-xs font-semibold text-cyan-700 tracking-wide">BACKEND</p></div>
+              <div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">Python Flask</div><div class="text-xs text-stone-500 font-light">RESTful APIs</div><div class="text-xs text-stone-500 font-light">Boomi AtomSphere API</div><div class="text-xs text-stone-500 font-light">PostgreSQL</div></div>
+            </div>
+            <div class="p-5 rounded-xl bg-purple-50/50 border border-purple-100">
+              <div class="flex items-center gap-2 mb-3"><i data-lucide="monitor" class="w-4 h-4 text-purple-600"></i><p class="text-xs font-semibold text-purple-700 tracking-wide">FRONTEND</p></div>
+              <div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">Vanilla JS (no framework bloat)</div><div class="text-xs text-stone-500 font-light">Modern CSS3, responsive</div><div class="text-xs text-stone-500 font-light">Real-time via WebSockets</div><div class="text-xs text-stone-500 font-light">Interactive dashboard</div></div>
+            </div>
+            <div class="p-5 rounded-xl bg-blue-50/50 border border-blue-100">
+              <div class="flex items-center gap-2 mb-3"><i data-lucide="cloud" class="w-4 h-4 text-blue-600"></i><p class="text-xs font-semibold text-blue-700 tracking-wide">DEPLOYMENT</p></div>
+              <div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">Azure App Service</div><div class="text-xs text-stone-500 font-light">VNet + App Gateway</div><div class="text-xs text-stone-500 font-light">Easy Auth (Azure AD)</div><div class="text-xs text-stone-500 font-light">Key Vault + WebJobs</div></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="p-4 rounded-xl bg-stone-50 border border-stone-100"><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Deployment</p><div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">One-click deploy</div><div class="text-xs text-stone-500 font-light">Pre-deploy validation</div><div class="text-xs text-stone-500 font-light">Automated rollback</div></div></div>
+            <div class="p-4 rounded-xl bg-stone-50 border border-stone-100"><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Dashboard</p><div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">Process health</div><div class="text-xs text-stone-500 font-light">Deploy history</div><div class="text-xs text-stone-500 font-light">Performance metrics</div></div></div>
+            <div class="p-4 rounded-xl bg-stone-50 border border-stone-100"><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Audit</p><div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">Full audit trail</div><div class="text-xs text-stone-500 font-light">ServiceNow tickets</div><div class="text-xs text-stone-500 font-light">Approvals workflow</div></div></div>
+            <div class="p-4 rounded-xl bg-stone-50 border border-stone-100"><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Integrations</p><div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">ServiceNow</div><div class="text-xs text-stone-500 font-light">Boomi API</div><div class="text-xs text-stone-500 font-light">Slack notifications</div></div></div>
+          </div>
+          <div class="glow-line mb-5"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">45→5 min</div><div class="text-[10px] text-stone-400 mt-1">Deploy Time</div></div>
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">99.9%</div><div class="text-[10px] text-stone-400 mt-1">Success Rate</div></div>
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">Zero</div><div class="text-[10px] text-stone-400 mt-1">Human Error</div></div>
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">Full</div><div class="text-[10px] text-stone-400 mt-1">Audit Trail</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-6"><div class="glow-line"></div></div>
+
+<!-- ==================== COGNIZANT / CABOT ==================== -->
+<section id="cognizant" class="py-28 px-6 light-section">
+  <div class="max-w-7xl mx-auto">
+    <div class="fade-in mb-14">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-600/20"><span class="text-white font-bold text-lg">C</span></div>
+        <div>
+          <p class="text-[10px] text-amber-700/60 font-semibold tracking-[0.2em] uppercase">Previous Role &middot; Jan 2022 — Sep 2024</p>
+          <h2 class="font-serif text-3xl md:text-5xl tracking-tight text-stone-900">Cognizant / Cabot</h2>
+        </div>
+      </div>
+      <p class="text-stone-500 font-light leading-relaxed max-w-3xl mt-4">Led large-scale platform migration from WebMethods to Dell Boomi, built comprehensive monitoring and testing frameworks, and drove a continuous performance optimization program delivering $500K+ in annual savings.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- WebMethods Migration -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in lg:col-span-2">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center"><i data-lucide="arrow-right-left" class="w-5 h-5 text-orange-600"></i></div>
+            <span class="status-completed text-[10px] font-semibold px-3 py-1 rounded-full">Completed & Closed</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">WebMethods to Boomi Migration</h3>
+          <p class="text-stone-400 text-xs font-medium">Platform Migration &middot; Jan 2022 — Nov 2023</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-6">Large-scale platform migration transitioning 40+ critical integrations from legacy WebMethods to Dell Boomi. 15 enterprise applications, 99.95% availability maintained, zero data loss.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div>
+              <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-3">Approach</p>
+              <div class="space-y-2">
+                <div class="achievement-item text-sm text-stone-600 font-light">Analyzed WebMethods architecture</div>
+                <div class="achievement-item text-sm text-stone-600 font-light">Redesigned using Boomi best practices</div>
+                <div class="achievement-item text-sm text-stone-600 font-light">Comprehensive testing and validation</div>
+                <div class="achievement-item text-sm text-stone-600 font-light">Coordinated cutover with business teams</div>
+              </div>
+            </div>
+            <div>
+              <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-3">Tech Stack</p>
+              <div class="flex flex-wrap gap-1.5 mb-4"><span class="tech-badge">WebMethods</span><span class="tech-badge">Dell Boomi</span><span class="tech-badge">Workday</span><span class="tech-badge">Salesforce</span><span class="tech-badge">SAP</span><span class="tech-badge">REST</span><span class="tech-badge">SOAP</span></div>
+              <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Scope</p>
+              <div class="space-y-1.5"><div class="text-xs text-stone-500 font-light">40+ processes migrated</div><div class="text-xs text-stone-500 font-light">15 enterprise apps affected</div><div class="text-xs text-stone-500 font-light">99.95% availability</div><div class="text-xs text-stone-500 font-light">Zero data loss</div></div>
+            </div>
+            <div>
+              <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-3">Results</p>
+              <div class="space-y-3">
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Efficiency</span><span class="text-amber-700 font-medium">60%</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="60"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Cost Reduction</span><span class="text-amber-700 font-medium">40%</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="40"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Availability</span><span class="text-amber-700 font-medium">99.95%</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="99.95"></div></div></div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <div class="achievement-item text-sm text-amber-800/80 font-light">Legacy platform decommissioned</div>
+                <div class="achievement-item text-sm text-amber-800/80 font-light">On time and under budget</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Dashboard -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center"><i data-lucide="bar-chart-3" class="w-5 h-5 text-green-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Ongoing</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Boomi Analytics Dashboard</h3>
+          <p class="text-stone-400 text-xs font-medium">May 2023 — Jun 2024</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Real-time visibility into Boomi process performance, execution metrics, and system health.</p>
+          <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="p-3 rounded-lg bg-green-50 border border-green-100 text-center"><div class="text-lg font-semibold text-green-700">70%</div><div class="text-[9px] text-stone-400 mt-0.5">MTTD Reduction</div></div>
+            <div class="p-3 rounded-lg bg-blue-50 border border-blue-100 text-center"><div class="text-lg font-semibold text-blue-700">Real-time</div><div class="text-[9px] text-stone-400 mt-0.5">Visibility</div></div>
+            <div class="p-3 rounded-lg bg-amber-50 border border-amber-100 text-center"><div class="text-lg font-semibold text-amber-700">SLA</div><div class="text-[9px] text-stone-400 mt-0.5">Reporting</div></div>
+          </div>
+          <div class="mb-5">
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Metrics</p>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="p-2 rounded-lg bg-stone-50"><p class="text-[9px] text-stone-400 font-semibold uppercase">Process Perf</p><p class="text-[10px] text-stone-500 mt-1">Exec time, success, errors</p></div>
+              <div class="p-2 rounded-lg bg-stone-50"><p class="text-[9px] text-stone-400 font-semibold uppercase">Connector Perf</p><p class="text-[10px] text-stone-500 mt-1">Elapsed time, throughput</p></div>
+              <div class="p-2 rounded-lg bg-stone-50"><p class="text-[9px] text-stone-400 font-semibold uppercase">System Health</p><p class="text-[10px] text-stone-500 mt-1">Trends, resources, queues</p></div>
+              <div class="p-2 rounded-lg bg-stone-50"><p class="text-[9px] text-stone-400 font-semibold uppercase">Business</p><p class="text-[10px] text-stone-500 mt-1">Volume, availability, SLA</p></div>
+            </div>
+          </div>
+          <div><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Tech</p><div class="flex flex-wrap gap-1.5"><span class="tech-badge">Boomi Insight</span><span class="tech-badge">SQL</span><span class="tech-badge">Custom Dashboards</span><span class="tech-badge">JavaScript</span></div></div>
+        </div>
+      </div>
+
+      <!-- Testing Framework -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in" style="transition-delay:0.05s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center"><i data-lucide="test-tubes" class="w-5 h-5 text-yellow-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Active & Maintained</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Automated Testing Framework</h3>
+          <p class="text-stone-400 text-xs font-medium">Jul 2023 — Mar 2024</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-5">Comprehensive automated testing — unit, integration, performance, and data quality — integrated into CI/CD for continuous validation on every commit.</p>
+          <div class="grid grid-cols-2 gap-2 mb-5">
+            <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-100"><p class="text-[9px] text-amber-700 font-semibold uppercase">Unit Tests</p><p class="text-[10px] text-stone-500 mt-1">Mapping, connectors, logic</p></div>
+            <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-100"><p class="text-[9px] text-blue-700 font-semibold uppercase">Integration</p><p class="text-[10px] text-stone-500 mt-1">E2E, multi-system, errors</p></div>
+            <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-100"><p class="text-[9px] text-green-700 font-semibold uppercase">Performance</p><p class="text-[10px] text-stone-500 mt-1">Load, stress, latency</p></div>
+            <div class="p-2.5 rounded-lg bg-stone-50 border border-stone-100"><p class="text-[9px] text-purple-700 font-semibold uppercase">Data Quality</p><p class="text-[10px] text-stone-500 mt-1">Counts, fields, accuracy</p></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">30→95%</div><div class="text-[10px] text-stone-400 mt-0.5">Coverage</div></div>
+            <div class="text-center"><div class="text-xl font-semibold text-amber-700">85%</div><div class="text-[10px] text-stone-400 mt-0.5">Bugs Pre-Prod</div></div>
+          </div>
+          <div>
+            <p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-2">Impact</p>
+            <div class="space-y-2">
+              <div class="achievement-item text-sm text-amber-800/80 font-light">70% reduction in manual testing time</div>
+              <div class="achievement-item text-sm text-amber-800/80 font-light">80% reduction in production incidents</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Optimization -->
+      <div class="glass-card rounded-2xl overflow-hidden project-card fade-in lg:col-span-2" style="transition-delay:0.1s">
+        <div class="company-header p-6 pb-0">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center"><i data-lucide="zap" class="w-5 h-5 text-teal-600"></i></div>
+            <span class="status-active text-[10px] font-semibold px-3 py-1 rounded-full">Ongoing Initiative</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-1">Performance Improvement & Optimization</h3>
+          <p class="text-stone-400 text-xs font-medium">Continuous Improvement &middot; Sep 2023 — Sep 2024</p>
+        </div>
+        <div class="p-6">
+          <p class="text-stone-500 text-sm font-light leading-relaxed mb-8">Continuous improvement initiative analyzing, optimizing, and tuning existing Boomi processes. $500K+ annual cost savings.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div>
+              <p class="text-[10px] text-emerald-700 font-semibold tracking-widest uppercase mb-4 flex items-center gap-2"><i data-lucide="cpu" class="w-3 h-3"></i>Resources</p>
+              <div class="space-y-3">
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">CPU Reduction</span><span class="text-emerald-700 font-medium">70%</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="70" style="background:linear-gradient(90deg,#059669,#34d399)"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Memory</span><span class="text-emerald-700 font-medium">60%↓</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="60" style="background:linear-gradient(90deg,#059669,#34d399)"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Storage</span><span class="text-emerald-700 font-medium">50%↑</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="50" style="background:linear-gradient(90deg,#059669,#34d399)"></div></div></div>
+                <div class="mt-3 p-2 rounded-lg bg-emerald-50 border border-emerald-100"><p class="text-xs text-emerald-700 font-medium">8 → 4 Atoms</p></div>
+              </div>
+            </div>
+            <div>
+              <p class="text-[10px] text-blue-700 font-semibold tracking-widest uppercase mb-4 flex items-center gap-2"><i data-lucide="gauge" class="w-3 h-3"></i>Performance</p>
+              <div class="space-y-3">
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Exec Time</span><span class="text-blue-700 font-medium">45%↓</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="45" style="background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Peak Load</span><span class="text-blue-700 font-medium">80%↑</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="80" style="background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Timeout Errors</span><span class="text-blue-700 font-medium">90%↓</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="90" style="background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div>
+              </div>
+            </div>
+            <div>
+              <p class="text-[10px] text-amber-700 font-semibold tracking-widest uppercase mb-4 flex items-center gap-2"><i data-lucide="shield" class="w-3 h-3"></i>Reliability</p>
+              <div class="space-y-3">
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Availability</span><span class="text-amber-700 font-medium">98.2→99.95%</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="99.95"></div></div></div>
+                <div><div class="flex justify-between text-xs mb-1"><span class="text-stone-500">Reliability</span><span class="text-amber-700 font-medium">45%↑</span></div><div class="metric-bar"><div class="metric-bar-fill" data-width="45" style="background:linear-gradient(90deg,#d97706,#fbbf24)"></div></div></div>
+                <div class="mt-3 p-2 rounded-lg bg-amber-50 border border-amber-100"><p class="text-xs text-amber-700 font-medium">$500K+ Annual Savings</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="glow-line mb-6"></div>
+          <div><p class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase mb-3">Techniques</p><div class="flex flex-wrap gap-1.5"><span class="tech-badge">Connection Pooling</span><span class="tech-badge">Batch Processing</span><span class="tech-badge">Async</span><span class="tech-badge">Caching</span><span class="tech-badge">DB Indexing</span><span class="tech-badge">Load Distribution</span><span class="tech-badge">Modular Refactoring</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CREDENTIALS ==================== -->
+<section id="credentials" class="py-28 px-6 mid-section">
+  <div class="max-w-5xl mx-auto">
+    <div class="fade-in mb-4 text-center">
+      <p class="text-amber-700/60 text-xs font-semibold tracking-[0.3em] uppercase mb-4">Certified on the platform I build on</p>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-stone-900">Credentials</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-14 fade-in" style="transition-delay:0.1s">
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Associate</p>
+        <h3 class="text-sm font-semibold text-stone-800">Boomi Developer</h3>
+      </div>
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Professional</p>
+        <h3 class="text-sm font-semibold text-stone-800">Boomi Developer</h3>
+      </div>
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Professional</p>
+        <h3 class="text-sm font-semibold text-stone-800">Boomi API Management</h3>
+      </div>
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Associate</p>
+        <h3 class="text-sm font-semibold text-stone-800">Boomi Administrator</h3>
+      </div>
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Associate</p>
+        <h3 class="text-sm font-semibold text-stone-800">Boomi Runtime Architect</h3>
+      </div>
+      <div class="cred-card">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] text-stone-400 font-semibold tracking-widest uppercase">Boomi</span>
+          <span class="text-[9px] text-green-600 font-semibold tracking-wider uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Verified</span>
+        </div>
+        <p class="text-[10px] text-amber-700 font-semibold tracking-wider uppercase mb-1">Associate</p>
+        <h3 class="text-sm font-semibold text-stone-800">EDI for X12</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STATS ==================== -->
+<section id="stats" class="py-28 px-6 light-section">
+  <div class="max-w-7xl mx-auto">
+    <div class="fade-in text-center mb-14">
+      <p class="text-amber-700/60 text-xs font-semibold tracking-[0.3em] uppercase mb-4">Career Overview</p>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-stone-900">By The Numbers</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in" style="transition-delay:0.1s">
+      <div class="glass-card rounded-2xl p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center"><span class="text-white font-bold text-xs">T</span></div>
+          <div><h3 class="font-semibold text-sm text-stone-900">TCS / SHV Energy</h3><p class="text-[10px] text-stone-400">Oct 2024 — Present &middot; 8 Months</p></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">8</div><div class="text-[10px] text-stone-400 mt-0.5">Active Projects</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">15+</div><div class="text-[10px] text-stone-400 mt-0.5">Systems Integrated</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">99.8%</div><div class="text-[10px] text-stone-400 mt-0.5">Success Rate</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">25+</div><div class="text-[10px] text-stone-400 mt-0.5">OAuth Migrations</div></div>
+        </div>
+        <div class="flex flex-wrap gap-1.5"><span class="tech-badge">ISA → IDS</span><span class="tech-badge">OAuth 2.0</span><span class="tech-badge">Cloud-Native</span><span class="tech-badge">Full-Stack</span><span class="tech-badge">CI/CD</span></div>
+      </div>
+      <div class="glass-card rounded-2xl p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center"><span class="text-white font-bold text-xs">C</span></div>
+          <div><h3 class="font-semibold text-sm text-stone-900">Cognizant / Cabot</h3><p class="text-[10px] text-stone-400">Jan 2022 — Sep 2024 &middot; 32 Months</p></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">4</div><div class="text-[10px] text-stone-400 mt-0.5">Major Initiatives</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">40+</div><div class="text-[10px] text-stone-400 mt-0.5">Processes Migrated</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">60%</div><div class="text-[10px] text-stone-400 mt-0.5">Efficiency Gain</div></div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><div class="text-2xl font-semibold text-amber-700">$500K+</div><div class="text-[10px] text-stone-400 mt-0.5">Annual Savings</div></div>
+        </div>
+        <div class="flex flex-wrap gap-1.5"><span class="tech-badge">Migration</span><span class="tech-badge">Automation</span><span class="tech-badge">Optimization</span><span class="tech-badge">Testing</span><span class="tech-badge">Analytics</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section id="contact" class="py-28 px-6 mid-section">
+  <div class="max-w-3xl mx-auto text-center fade-in">
+    <p class="text-amber-700/60 text-xs font-semibold tracking-[0.3em] uppercase mb-4">Get In Touch</p>
+    <h2 class="font-serif text-3xl md:text-4xl tracking-tight text-stone-900 mb-6">Let's Connect</h2>
+    <p class="text-stone-500 font-light leading-relaxed mb-10">Open to discussing Boomi integration challenges, design patterns, or new opportunities. Always interested in solving complex connectivity problems.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="https://www.linkedin.com/in/mohd-tayiaf-95aa171aa/" target="_blank" rel="noopener" class="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/20">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Connect on LinkedIn
+      </a>
+      <a href="mailto:khantaif1999@gmail.com" class="inline-flex items-center gap-3 px-8 py-4 border border-stone-200 hover:border-amber-400 text-stone-700 font-medium text-sm rounded-full transition-all duration-300 hover:bg-amber-50">
+        <i data-lucide="mail" class="w-4 h-4"></i>Send Email
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-8 px-6 border-t border-stone-100 light-section">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-xs text-stone-400">&copy; 2025 Mohd Tayiaf &middot; Senior Boomi Developer</p>
+    <a href="https://www.linkedin.com/in/mohdtayiaf" target="_blank" rel="noopener" class="text-stone-300 hover:text-amber-600 transition-colors">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+// ============ KINETIC GRID (hero background, amber/stone theme) ============
+(function(){
+const canvas=document.getElementById('kinetic-grid-canvas');
+const section=document.getElementById('about');
+if(!canvas||!section)return;
+const ctx=canvas.getContext('2d');
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const CELL_SIZE=55,INFLUENCE_RADIUS=260,MAX_WARP=24,DOT_SPACING=28,LERP_SPEED=0.08;
+const LINE_BASE={r:28,g:25,b:23,a:0.07};
+const NODE_BASE={r:28,g:25,b:23,a:0.14};
+const NODE_BASE_RADIUS=1.6,NODE_ACTIVE_RADIUS=3;
+const theme={lineActive:{r:217,g:119,b:6,a:0.55},nodeActive:{r:217,g:119,b:6,a:1},glow:'217,119,6',ripple:'180,83,9'};
+
+function lerpN(a,b,t){return a+(b-a)*t}
+function lerpColor(base,active,t){const r=Math.round(lerpN(base.r,active.r,t)),g=Math.round(lerpN(base.g,active.g,t)),b=Math.round(lerpN(base.b,active.b,t)),a=lerpN(base.a,active.a,t);return `rgba(${r},${g},${b},${a.toFixed(3)})`}
+
+let W=0,H=0;
+const mouse={x:-9999,y:-9999},targetMouse={x:-9999,y:-9999};
+let ripples=[];
+
+function setSize(){
+  const r=section.getBoundingClientRect();
+  W=r.width;H=r.height;
+  canvas.width=W*Math.min(window.devicePixelRatio||1,2);
+  canvas.height=H*Math.min(window.devicePixelRatio||1,2);
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.setTransform(Math.min(window.devicePixelRatio||1,2),0,0,Math.min(window.devicePixelRatio||1,2),0,0);
+}
+setSize();
+window.addEventListener('resize',setSize);
+
+function onMouseMove(e){
+  const r=section.getBoundingClientRect();
+  targetMouse.x=e.clientX-r.left;targetMouse.y=e.clientY-r.top;
+}
+window.addEventListener('mousemove',onMouseMove);
+
+section.addEventListener('click',e=>{
+  if(e.target.closest('a,button'))return;
+  const r=section.getBoundingClientRect();
+  ripples.push({x:e.clientX-r.left,y:e.clientY-r.top,radius:0,opacity:1,born:performance.now()});
+});
+
+function getWarpedPoint(gx,gy,col,row,cols,rows){
+  const edgeMargin=1.5;
+  const colPin=Math.min(col/edgeMargin,(cols-1-col)/edgeMargin,1);
+  const rowPin=Math.min(row/edgeMargin,(rows-1-row)/edgeMargin,1);
+  const pinFactor=colPin*colPin*rowPin*rowPin;
+
+  const dx=gx-mouse.x,dy=gy-mouse.y;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const proximity=Math.max(0,1-dist/INFLUENCE_RADIUS)*pinFactor;
+
+  let rx=0,ry=0;
+  for(const rp of ripples){
+    const rdx=gx-rp.x,rdy=gy-rp.y;
+    const rdist=Math.sqrt(rdx*rdx+rdy*rdy);
+    const waveWidth=55,diff=rdist-rp.radius;
+    if(Math.abs(diff)<waveWidth){
+      const strength=(1-Math.abs(diff)/waveWidth)*rp.opacity*18*pinFactor;
+      const angle=Math.atan2(rdy,rdx),sign=diff<0?-1:1;
+      rx+=Math.cos(angle)*strength*sign*-1;ry+=Math.sin(angle)*strength*sign*-1;
+    }
+  }
+
+  if(dist<INFLUENCE_RADIUS && dist>0 && pinFactor>0){
+    const t=dist/INFLUENCE_RADIUS;
+    const eased=t<0.01?0:(1-t)*(1-t)*Math.min(1,dist/60);
+    const warpAmt=eased*MAX_WARP*pinFactor;
+    const angle=Math.atan2(dy,dx);
+    return {pt:{x:gx-Math.cos(angle)*warpAmt+rx,y:gy-Math.sin(angle)*warpAmt+ry},proximity};
+  }
+  return {pt:{x:gx+rx,y:gy+ry},proximity};
+}
+
+function draw(now){
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle='rgba(28,25,23,0.045)';
+  for(let x=DOT_SPACING/2;x<W;x+=DOT_SPACING){
+    for(let y=DOT_SPACING/2;y<H;y+=DOT_SPACING){
+      ctx.beginPath();ctx.arc(x,y,0.7,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  for(let i=ripples.length-1;i>=0;i--){
+    const r=ripples[i];
+    const age=(now-r.born)/1000;
+    r.radius=Math.max(0,age*400);
+    r.opacity=Math.max(0,1-age*1.2);
+    if(r.opacity<=0)ripples.splice(i,1);
+  }
+
+  const cols=Math.max(2,Math.ceil(W/CELL_SIZE))+1;
+  const rows=Math.max(2,Math.ceil(H/CELL_SIZE))+1;
+  const cellW=W/(cols-1),cellH=H/(rows-1);
+
+  const pts=[],prox=[];
+  for(let row=0;row<rows;row++){
+    pts[row]=[];prox[row]=[];
+    for(let col=0;col<cols;col++){
+      const {pt,proximity}=getWarpedPoint(col*cellW,row*cellH,col,row,cols,rows);
+      pts[row][col]=pt;prox[row][col]=proximity;
+    }
+  }
+
+  const drawSeg=(p1,p2,pr1,pr2)=>{
+    const avg=(pr1+pr2)/2,t=avg*avg*(3-2*avg);
+    ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);
+    ctx.strokeStyle=lerpColor(LINE_BASE,theme.lineActive,t);
+    ctx.lineWidth=lerpN(0.8,1.5,t);ctx.stroke();
+  };
+  ctx.lineCap='butt';
+  for(let row=0;row<rows;row++)for(let col=0;col<cols-1;col++)drawSeg(pts[row][col],pts[row][col+1],prox[row][col],prox[row][col+1]);
+  for(let col=0;col<cols;col++)for(let row=0;row<rows-1;row++)drawSeg(pts[row][col],pts[row+1][col],prox[row][col],prox[row+1][col]);
+
+  for(let row=0;row<rows;row++){
+    for(let col=0;col<cols;col++){
+      const p=pts[row][col],pr=prox[row][col];
+      const t=pr*pr*(3-2*pr);
+      const r=lerpN(NODE_BASE_RADIUS,NODE_ACTIVE_RADIUS,t);
+      if(t>0.3){
+        const glowR=r+lerpN(0,6,(t-0.3)/0.7);
+        const grd=ctx.createRadialGradient(p.x,p.y,r*0.5,p.x,p.y,glowR);
+        grd.addColorStop(0,`rgba(${theme.glow},${(t*0.3).toFixed(3)})`);
+        grd.addColorStop(1,`rgba(${theme.glow},0)`);
+        ctx.beginPath();ctx.arc(p.x,p.y,glowR,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);
+      ctx.fillStyle=lerpColor(NODE_BASE,theme.nodeActive,t);ctx.fill();
+    }
+  }
+
+  for(const r of ripples){
+    const safeRadius=Math.max(0,r.radius);
+    ctx.beginPath();ctx.arc(r.x,r.y,safeRadius,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(${theme.ripple},${(r.opacity*0.28).toFixed(3)})`;
+    ctx.lineWidth=1.5;ctx.stroke();
+  }
+}
+
+if(reduced){
+  mouse.x=W/2;mouse.y=H/2;
+  draw(performance.now());
+}else{
+  function animate(now){
+    mouse.x=lerpN(mouse.x,targetMouse.x,LERP_SPEED);
+    mouse.y=lerpN(mouse.y,targetMouse.y,LERP_SPEED);
+    draw(now);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+}
+})();
+
+// ============ UI ============
+document.getElementById('mobile-menu-btn').addEventListener('click',()=>{document.getElementById('mobile-menu').classList.toggle('hidden')});
+document.querySelectorAll('#mobile-menu a').forEach(a=>{a.addEventListener('click',()=>document.getElementById('mobile-menu').classList.add('hidden'))});
+function toggleDetail(btn){const sec=btn.nextElementSibling;sec.classList.toggle('open');btn.classList.toggle('active');btn.querySelector('span').textContent=sec.classList.contains('open')?'Hide Details':'View Details'}
+document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;document.querySelectorAll('#tcs-projects .project-card').forEach(card=>{if(f==='all'||card.dataset.category===f){card.style.display='';card.style.opacity='0';card.style.transform='translateY(20px)';requestAnimationFrame(()=>{card.style.transition='opacity 0.5s,transform 0.5s';card.style.opacity='1';card.style.transform='translateY(0)'})}else{card.style.display='none'}})})});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('.metric-bar-fill').forEach(bar=>{setTimeout(()=>{bar.style.width=Math.min(bar.dataset.width,100)+'%'},300)});e.target.querySelectorAll('[data-count]').forEach(el=>{const target=parseFloat(el.dataset.count),suffix=el.dataset.suffix||'',decimal=parseInt(el.dataset.decimal)||0;let cur=0;const inc=target/40;const timer=setInterval(()=>{cur+=inc;if(cur>=target){cur=target;clearInterval(timer)}el.textContent=(decimal>0?cur.toFixed(decimal):Math.floor(cur))+suffix},30)})}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+document.querySelectorAll('.metric-bar-fill').forEach(bar=>{bar.style.width='0%'});
+lucide.createIcons();
+
+// ============ PREMIUM MOTION LAYER (GSAP) ============
+(function(){
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+gsap.registerPlugin(ScrollTrigger);
+
+// ---- Scroll progress bar ----
+gsap.to('#scroll-progress',{width:'100%',ease:'none',scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:0.3}});
+
+// ---- Custom cursor ----
+if(finePointer && !reduced){
+  document.body.classList.add('has-fine-pointer');
+  const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+  const dotX=gsap.quickTo(dot,'x',{duration:0.1,ease:'power2.out'}),dotY=gsap.quickTo(dot,'y',{duration:0.1,ease:'power2.out'});
+  const ringX=gsap.quickTo(ring,'x',{duration:0.35,ease:'power3.out'}),ringY=gsap.quickTo(ring,'y',{duration:0.35,ease:'power3.out'});
+  window.addEventListener('mousemove',e=>{dotX(e.clientX);dotY(e.clientY);ringX(e.clientX);ringY(e.clientY)});
+  document.querySelectorAll('a,button,.skill-card,.glass-card,.cred-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('cursor-hover'));
+  });
+}
+
+// ---- Magnetic buttons (hero CTA + contact CTA) ----
+if(finePointer && !reduced){
+  document.querySelectorAll('a.magnetic-btn, .flex a[href^="#tcs"], a[href^="https://www.linkedin"], a[href^="mailto"]').forEach(btn=>{
+    btn.classList.add('magnetic-btn');
+    const xTo=gsap.quickTo(btn,'x',{duration:0.5,ease:'elastic.out(1,0.4)'});
+    const yTo=gsap.quickTo(btn,'y',{duration:0.5,ease:'elastic.out(1,0.4)'});
+    btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();xTo((e.clientX-r.left-r.width/2)*0.25);yTo((e.clientY-r.top-r.height/2)*0.25)});
+    btn.addEventListener('mouseleave',()=>{xTo(0);yTo(0)});
+  });
+}
+
+// ---- Tilt cards with shine ----
+document.querySelectorAll('.glass-card, .skill-card, .cred-card').forEach(card=>{
+  card.classList.add('tilt-card');
+  const shine=document.createElement('div');shine.className='tilt-shine';card.appendChild(shine);
+  if(!finePointer||reduced)return;
+  const rx=gsap.quickTo(card,'rotationX',{duration:0.4,ease:'power2.out'});
+  const ry=gsap.quickTo(card,'rotationY',{duration:0.4,ease:'power2.out'});
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+    ry((px-0.5)*6);rx(-(py-0.5)*6);
+    card.style.setProperty('--mx',(px*100)+'%');card.style.setProperty('--my',(py*100)+'%');
+  });
+  card.addEventListener('mouseleave',()=>{rx(0);ry(0)});
+});
+
+// ---- Nav scrollspy ----
+const navLinks=document.querySelectorAll('.nav-link[href^="#"]');
+navLinks.forEach(link=>{
+  const id=link.getAttribute('href');
+  const target=document.querySelector(id);
+  if(!target)return;
+  ScrollTrigger.create({trigger:target,start:'top center',end:'bottom center',onToggle:self=>{if(self.isActive){navLinks.forEach(l=>l.classList.remove('nav-active'));document.querySelectorAll(`.nav-link[href="${id}"]`).forEach(l=>l.classList.add('nav-active'))}}});
+});
+
+// ---- Kicker underline draw ----
+document.querySelectorAll('.fade-in p.text-xs.font-semibold.tracking-\\[0\\.3em\\], .fade-in p.text-\\[10px\\].font-semibold.tracking-\\[0\\.2em\\]').forEach(el=>{
+  el.classList.add('kicker-line');
+  ScrollTrigger.create({trigger:el,start:'top 85%',onEnter:()=>el.classList.add('line-drawn'),onEnterBack:()=>el.classList.add('line-drawn')});
+});
+
+if(!reduced){
+  // ---- Hero headline reveal (clip-path wipe; keeps the gradient text-fill intact) ----
+  const heroEl=document.querySelector('#about h1 .hero-text-gradient');
+  if(heroEl){
+    gsap.fromTo(heroEl,{clipPath:'inset(0 100% 0 0)',y:24},{clipPath:'inset(0 0% 0 0)',y:0,duration:1.1,ease:'expo.out',delay:0.15});
+  }
+
+  // ---- Staggered grid reveals (skills / process / projects / credentials) ----
+  const grids=['#skills .grid','#process .grid','#tcs-projects','#credentials .grid'];
+  grids.forEach(sel=>{
+    const grid=document.querySelector(sel);
+    if(!grid)return;
+    const items=grid.children;
+    // hand off from the legacy per-element IntersectionObserver fade-in to GSAP for these grids
+    Array.from(items).forEach(it=>{if(it.classList.contains('fade-in')){obs.unobserve(it);it.classList.remove('fade-in','visible');it.style.opacity='';it.style.transform=''}});
+    gsap.set(items,{opacity:0,y:28,scale:0.96});
+    ScrollTrigger.create({
+      trigger:grid,start:'top 82%',
+      onEnter:()=>gsap.to(items,{opacity:1,y:0,scale:1,duration:0.6,ease:'back.out(1.4)',stagger:{each:0.07,from:'start'}}),
+      once:true
+    });
+  });
+
+  // ---- Stat cards pop-in ----
+  const statGrid=document.querySelector('#about .grid');
+  if(statGrid){
+    gsap.set(statGrid.children,{opacity:0,y:20});
+    ScrollTrigger.create({trigger:statGrid,start:'top 90%',onEnter:()=>gsap.to(statGrid.children,{opacity:1,y:0,duration:0.5,stagger:0.08,ease:'power2.out'}),once:true});
+  }
+}
+})();
+</script>
+</body>
+</html>
